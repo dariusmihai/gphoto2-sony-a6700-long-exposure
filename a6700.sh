@@ -34,6 +34,9 @@ CAMERA_ISO=800
 # Do not change anything below this line unless you know what you're doing               ###
 ############################################################################################
 
+# Start time for elapsed time calculation
+START_TIME=$(date +%s)
+
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -82,6 +85,15 @@ get_battery_level() {
     echo "Battery: $BATTERY_PERCENTAGE"
 }
 
+get_elapsed_time() {
+    CURRENT_TIME=$(date +%s)
+    ELAPSED_SECONDS=$((CURRENT_TIME - START_TIME))
+    ELAPSED_HOURS=$((ELAPSED_SECONDS / 3600))
+    ELAPSED_MINUTES=$(((ELAPSED_SECONDS % 3600) / 60))
+    ELAPSED_SECONDS=$((ELAPSED_SECONDS % 60))
+    printf "Elapsed Time: %02d:%02d:%02d\n" "$ELAPSED_HOURS" "$ELAPSED_MINUTES" "$ELAPSED_SECONDS"
+}
+
 # Detect camera and set Bulb mode
 gphoto2 --auto-detect
 gphoto2 --set-config shutterspeed=61  # Set shutter speed to Bulb
@@ -121,6 +133,7 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
     echo "Exposure #$i completed -> $FILENAME"
 
     get_battery_level
+    get_elapsed_time
     sleep 5  # Short delay between exposures
 done
 
