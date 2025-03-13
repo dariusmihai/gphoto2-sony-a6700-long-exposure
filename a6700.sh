@@ -12,7 +12,7 @@
 # specified save path.                                                                   ###
 #                                                                                        ###
 # Arguments:                                                                             ###
-#   -e, --exposure-length   [DEPRECATED, DO NOT USE]                                     ###
+#   -e, --exposure-length   [NON-FUNCTIONAL on A6700]  See comment at the top            ###
 #   -n, --num-exposures     Set the number of exposures to take (default: 5)             ###
 #   -s, --save-path         Specify the directory to save the images (default: ~/a6700)  ###
 #   -i, --iso               Specify the ISO for the captures (default: 800)              ###
@@ -26,9 +26,10 @@
 # Default values. Change them if you want to run the script without any arguments and 
 # still get your desired outcome
 NUM_EXPOSURES=9999
-EXPOSURE_TIME=120  # A6700 quirk. Set this to match the bulb timer setting in the camera
-SAVE_PATH="$HOME/a6700"
 CAMERA_ISO=800
+SAVE_PATH="$HOME/a6700"
+
+# [NON-FUNCTIONAL] EXPOSURE_TIME=120  # A6700 quirk.
 
 ############################################################################################
 # Do not change anything below this line unless you know what you're doing               ###
@@ -40,25 +41,21 @@ START_TIME=$(date +%s)
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -e|--exposure-length)
-            EXPOSURE_TIME="$2"
-            shift 2
-            ;;
         -n|--num-exposures)
             NUM_EXPOSURES="$2"
-            shift 2
-            ;;
-        -s|--save-path)
-            SAVE_PATH="$2"
             shift 2
             ;;
         -i|--iso)
             CAMERA_ISO="$2"
             shift 2
             ;;
+        -s|--save-path)
+            SAVE_PATH="$2"
+            shift 2
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-n num-exposures] [-s save-path] [-i iso]"
+            echo "Usage: $0 [-n num-exposures] [-i iso] [-s save-path]"
             exit 1
             ;;
     esac
@@ -94,13 +91,22 @@ get_elapsed_time() {
     printf "Elapsed Time: %02d:%02d:%02d\n" "$ELAPSED_HOURS" "$ELAPSED_MINUTES" "$ELAPSED_SECONDS"
 }
 
+get_exposure_stats() {
+    CURRENT_TIME=$(date +%s)
+    EXPOSURE_START_TIME=$1
+    EXPOSURE_DURATION=$((CURRENT_TIME - EXPOSURE_START_TIME))
+    AVERAGE_EXPOSURE_TIME=$(((CURRENT_TIME - START_TIME) / i))
+    printf "Current Exposure Time: %02d seconds\n" "$EXPOSURE_DURATION"
+    printf "Average Time per Exposure: %02d seconds\n" "$AVERAGE_EXPOSURE_TIME"
+}
+
 # Detect camera and set Bulb mode
 gphoto2 --auto-detect
 gphoto2 --set-config shutterspeed=61  # Set shutter speed to Bulb
 gphoto2 --set-config iso="$CAMERA_ISO"
 
 # Add buffer time to ensure we don't time out too early
-WAIT_TIME=$((EXPOSURE_TIME + 5))
+# [DEPRECATED] WAIT_TIME=$((EXPOSURE_TIME + 5))
 
 echo " "
 echo "#####################################################################################"
@@ -115,25 +121,19 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
     FILENAME="$SAVE_PATH/image_$TIMESTAMP.arw"
 
     echo "Starting exposure #$i at $TIMESTAMP"
-    
+    EXPOSURE_START_TIME=$(date +%s)
+
     # Capture and download image; Disregard spammy messages in the output.
     gphoto2 --capture-image-and-download --wait-event-and-download=CAPTURECOMPLETE --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
-
-    # OLDER VERSIONS OF THE gphoto2 LINE
-    # gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
     
     # With debug
     #gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
-
-    # Slightly better version
-    # gphoto2 --capture-image-and-download --wait-event=CAPTURECOMPLETE --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
-
-    
 
     echo "Exposure #$i completed -> $FILENAME"
 
     get_battery_level
     get_elapsed_time
+    get_exposure_stats "$EXPOSURE_START_TIME"
     sleep 5  # Short delay between exposures
 done
 
