@@ -7,6 +7,7 @@ Unfortunately most cameras only allow exposures up to 30 seconds, especially in 
  
 To top it all up, The Sony A6700 doesn't even have a port for an external intervalometer.  
 But wait, the quirks don't stop here with this camera. Repeated long exposures don't even work from the official mobile apps: Imaging Edge Mobile and Sony Creator's App.   
+
 The only one that somewhat works, but very unreliable, is Sony Imaging Edge Desktop. This runs on windows machines and it does work sometimes. The problem is that it randomly disconnect after 3 exposures, 5 exposures or 20 exposures.
 
 ## The solution
