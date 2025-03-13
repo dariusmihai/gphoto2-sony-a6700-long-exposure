@@ -1,10 +1,20 @@
 # Why this exists
 The Sony A6700 is a bit weird when it comes to doing long exposures (bulb) remotely.
-Sometimes you just want to set up your camera and let it do multiple long exposures in a row. For example for timelapses or astrophotography.
+Sometimes you just want to set up your camera and let it do multiple long exposures in a row. For example for timelapses or astrophotography.  
 
+Unfortunately most cameras only allow exposures up to 30 seconds, especially in interval shooting. The Sony A6700 does have an internal bulb timer
+ that lets you go up to 999 seconds for the shutter speed, but that only works in single-exposure mode, not in interval shooting.  
+ 
+To top it all up, The Sony A6700 doesn't even have a port for an external intervalometer.  
+But wait, the quirks don't stop here with this camera. Repeated long exposures don't even work from the official mobile apps: Imaging Edge Mobile and Sony Creator's App.   
+The only one that somewhat works, but very unreliable, is Sony Imaging Edge Desktop. This runs on windows machines and it does work sometimes. The problem is that it randomly disconnect after 3 exposures, 5 exposures or 20 exposures.
+
+## The solution
 
 [Gphoto2](https://github.com/gphoto/gphoto2) is a great tool for this. Unfortunately the Sony A6700 has some quirks that doesn't let gphoto2 do its thing.
-For more info on the quirks, see the feature request that I posted on the gphoto2 repo: [Issue link](https://github.com/gphoto/gphoto2/issues/678)
+For more info on the quirks, see the feature request that I posted on the gphoto2 repo: [Issue link](https://github.com/gphoto/gphoto2/issues/678)  
+
+To resolve the issues described above, I wrote this wrapper script that uses gphoto2 in a way that the A6700 supports.
 
 ## Compatibility  
 This script can be used on:
