@@ -61,6 +61,7 @@ mkdir -p "$SAVE_PATH"
 # Function to handle graceful exit when Ctrl+C is pressed
 cleanup() {
     echo "Gracefully shutting down..."
+    gphoto2 --reset
     echo "Available cameras: "
     gphoto2 --auto-detect
     exit 0
@@ -68,6 +69,12 @@ cleanup() {
 
 # Trap Ctrl+C (SIGINT) and call the cleanup function
 trap cleanup SIGINT
+
+get_battery_level() {
+    BATTERY_LEVEL_OUTPUT=$(gphoto2 --get-config batterylevel)
+    BATTERY_PERCENTAGE=$(echo "$BATTERY_LEVEL_OUTPUT" | grep -oP 'Current: \K[0-9]+%')
+    echo "Battery: $BATTERY_PERCENTAGE"
+}
 
 # Detect camera and set Bulb mode
 gphoto2 --auto-detect
@@ -86,6 +93,7 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
     gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
     echo "Exposure #$i completed -> $FILENAME"
 
+    get_battery_level
     sleep 5  # Short delay between exposures
 done
 
