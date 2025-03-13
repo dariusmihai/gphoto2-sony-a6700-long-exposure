@@ -12,7 +12,7 @@
 # specified save path.                                                                   ###
 #                                                                                        ###
 # Arguments:                                                                             ###
-#   -e, --exposure-length   Set the exposure length in seconds (default: 120 seconds)    ###
+#   -e, --exposure-length   [DEPRECATED, DO NOT USE]                                     ###
 #   -n, --num-exposures     Set the number of exposures to take (default: 5)             ###
 #   -s, --save-path         Specify the directory to save the images (default: ~/a6700)  ###
 #   -i, --iso               Specify the ISO for the captures (default: 800)              ###
@@ -49,13 +49,13 @@ while [[ $# -gt 0 ]]; do
             SAVE_PATH="$2"
             shift 2
             ;;
-        --i|--iso)
+        -i|--iso)
             CAMERA_ISO="$2"
             shift 2
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-e exposure-length] [-n num-exposures] [-s save-path] [-i iso]"
+            echo "Usage: $0 [-n num-exposures] [-s save-path] [-i iso]"
             exit 1
             ;;
     esac
@@ -102,14 +102,19 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
 
     echo "Starting exposure #$i at $TIMESTAMP"
     
-    # Capture and download image
+    # Capture and download image; Disregard spammy messages in the output.
+    gphoto2 --capture-image-and-download --wait-event-and-download=CAPTURECOMPLETE --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
+
+    # OLDER VERSIONS OF THE gphoto2 LINE
     # gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
     
     # With debug
     #gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
 
     # Slightly better version
-    gphoto2 --capture-image-and-download --wait-event=CAPTURECOMPLETE --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
+    # gphoto2 --capture-image-and-download --wait-event=CAPTURECOMPLETE --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
+
+    
 
     echo "Exposure #$i completed -> $FILENAME"
 
