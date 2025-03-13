@@ -17,10 +17,16 @@ The other way is to compile it from source using the very good guide available o
 Then do the following:
 `git clone https://github.com/dariusmihai/gphoto2-sony-a6700-long-exposure`
 `cd gphoto2-sony-a6700-long-exposure`
-`chmod +x a6700-bulb.sh`
-`./a6700-bulb.sh`
+`chmod +x a6700.sh`
+`./a6700.sh`
 
-This will trigger 5 exposures of 120 seconds each.  
+This will trigger 9999 exposures of 120 seconds each.  
+
+You can also do:  
+`./a6700.sh -n 5 -e 100 -s ~/photos` to trigger:
+- 5 exposures
+- 100 seconds each
+- all saved to ~/photos  
 
 ## Setup your camera
 Set the camera to photo mode.  
