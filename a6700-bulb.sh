@@ -40,6 +40,16 @@ done
 # Ensure the save directory exists
 mkdir -p "$SAVE_PATH"
 
+# Function to handle graceful exit when Ctrl+C is pressed
+cleanup() {
+    echo "Gracefully shutting down..."
+    gphoto2 --exit  # Disconnects the camera from gphoto2
+    exit 0
+}
+
+# Trap Ctrl+C (SIGINT) and call the cleanup function
+trap cleanup SIGINT
+
 # Detect camera and set Bulb mode
 gphoto2 --auto-detect
 gphoto2 --set-config-index shutterspeed=61  # Set shutter speed to Bulb
