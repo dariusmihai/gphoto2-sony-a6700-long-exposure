@@ -13,11 +13,12 @@
 #                                                                                        ###
 # Arguments:                                                                             ###
 #   -e, --exposure-length   Set the exposure length in seconds (default: 120 seconds)    ###
-#   -n, --num-exposures      Set the number of exposures to take (default: 5)            ###
-#   -s, --save-path          Specify the directory to save the images (default: ~/a6700) ###
+#   -n, --num-exposures     Set the number of exposures to take (default: 5)             ###
+#   -s, --save-path         Specify the directory to save the images (default: ~/a6700)  ###
+#   -i, --iso               Specify the ISO for the captures (default: 800)              ###
 #                                                                                        ###
 # Example usage:                                                                         ###
-#   ./a6700.sh -e 60 -n 10 -s ~/photos                                           ###
+#   ./a6700.sh -e 60 -n 10 -s ~/photos                                                   ###
 #   This will take 10 exposures, each lasting 60 seconds, and save them in the           ###
 #   ~/photos directory.                                                                  ###
 ############################################################################################
@@ -27,6 +28,7 @@
 NUM_EXPOSURES=9999
 EXPOSURE_TIME=120  # A6700 quirk. Set this to match the bulb timer setting in the camera
 SAVE_PATH="$HOME/a6700"
+CAMERA_ISO=800
 
 ############################################################################################
 # Do not change anything below this line unless you know what you're doing               ###
@@ -47,9 +49,13 @@ while [[ $# -gt 0 ]]; do
             SAVE_PATH="$2"
             shift 2
             ;;
+        --i|--iso)
+            CAMERA_ISO="$2"
+            shift 2
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-e exposure-length] [-n num-exposures] [-s save-path]"
+            echo "Usage: $0 [-e exposure-length] [-n num-exposures] [-s save-path] [-i iso]"
             exit 1
             ;;
     esac
@@ -79,6 +85,7 @@ get_battery_level() {
 # Detect camera and set Bulb mode
 gphoto2 --auto-detect
 gphoto2 --set-config shutterspeed=61  # Set shutter speed to Bulb
+gphoto2 --set-config iso="$CAMERA_ISO"
 
 # Add buffer time to ensure we don't time out too early
 WAIT_TIME=$((EXPOSURE_TIME + 5))
@@ -90,7 +97,11 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
     echo "Starting exposure #$i at $TIMESTAMP"
     
     # Capture and download image
-    gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
+    # gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
+    
+    # With debug
+    gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
+
     echo "Exposure #$i completed -> $FILENAME"
 
     get_battery_level
