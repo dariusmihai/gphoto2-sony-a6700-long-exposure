@@ -52,7 +52,7 @@ trap cleanup SIGINT
 
 # Detect camera and set Bulb mode
 gphoto2 --auto-detect
-gphoto2 --set-config-index shutterspeed=61  # Set shutter speed to Bulb
+gphoto2 --set-config shutterspeed=61  # Set shutter speed to Bulb
 
 # Add buffer time to ensure we don't time out too early
 WAIT_TIME=$((EXPOSURE_TIME + 5))
