@@ -44,7 +44,8 @@ mkdir -p "$SAVE_PATH"
 # Function to handle graceful exit when Ctrl+C is pressed
 cleanup() {
     echo "Gracefully shutting down..."
-    gphoto2 --exit  # Disconnects the camera from gphoto2
+    echo "Available cameras: "
+    gphoto2 --list-cameras  # Disconnects the camera from gphoto2
     exit 0
 }
 
