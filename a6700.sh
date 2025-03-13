@@ -156,50 +156,48 @@ get_exposure_stats() {
 
 # Function to capture an image with retry logic
 capture_image() {
-    local retries=3  # Number of retries if an error occurs
     local wait_time=10  # Wait time between retries (seconds)
     local exposure_number="$1"
     local timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
     local filename="$SAVE_PATH/image_$timestamp.arw"
 
-    # Retry the exposure capture up to the number of retries
-    for ((attempt=1; attempt<=retries; attempt++)); do
-        echo " "
-        echo "------------------------------------------------------------------------"
-        echo "📸 Starting exposure #$exposure_number (Attempt $attempt/$retries)..."
+    echo " "
+    echo "------------------------------------------------------------------------"
+    echo "📸 Starting exposure #$exposure_number..."
 
-        # Check camera connection before each capture
-        check_camera_connection 9999 "silent"
-        
-        # If the camera is not detected, handle it and exit after retries
-        if [ $? -eq 1 ]; then
-            echo "❌ Camera check failed after retries. Exiting."
-            exit 1  # Exit after failed connection retries
-        fi
+    # Check camera connection before each capture
+    check_camera_connection 9999 "silent"
+    
+    # If the camera is not detected after retries, handle it and exit
+    if [ $? -eq 1 ]; then
+        echo "❌ Camera check failed after retries. Exiting."
+        exit 1  # Exit after failed connection retries
+    fi
 
-        # Capture and download image; Disregard spammy messages in the output.
-        if gphoto2 --capture-image-and-download --wait-event-and-download=CAPTURECOMPLETE --filename "$filename" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"; then
-            echo "✅ Exposure #$exposure_number completed -> $filename"
-            get_battery_level
-            get_elapsed_time
-            get_exposure_stats "$EXPOSURE_START_TIME" "$exposure_number"
-            return 0  # Success
-        else
-            echo "⚠️  ERROR: Failed to capture image. Checking camera connection..."
+    # Capture and download image; Disregard spammy messages in the output.
+    if gphoto2 --capture-image-and-download --wait-event-and-download=CAPTURECOMPLETE --filename "$filename" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"; then
+        echo "✅ Exposure #$exposure_number completed -> $filename"
+        get_battery_level
+        get_elapsed_time
+        get_exposure_stats "$EXPOSURE_START_TIME" "$exposure_number"
+        return 0  # Success
+    else
+        echo "⚠️  ERROR: Failed to capture image. Checking camera connection..."
 
-            # Check the camera connection only if there's an issue with capturing the image
-            check_camera_connection 9999 || { echo "❌ Camera check failed after retries. Exiting."; exit 1; }
+        # Check the camera connection only if there's an issue with capturing the image
+        check_camera_connection 9999 || { echo "❌ Camera check failed after retries. Exiting."; exit 1; }
 
-            echo "🔄 Reinitializing camera..."
-            # Reinitialize camera settings after failure
-            camera_init || { echo "❌ Camera reinitialization failed. Exiting."; exit 1; }
-            sleep $wait_time
-        fi
-    done
+        echo "🔄 Reinitializing camera..."
+        # Reinitialize camera settings after failure
+        camera_init || { echo "❌ Camera reinitialization failed. Exiting."; exit 1; }
+        sleep $wait_time
+    fi
 
     echo "❌ ERROR: Capture failed after multiple attempts. Exiting."
     exit 1
 }
+
+
 
 # Detect camera and set Bulb mode
 check_camera_connection 5 || { echo "❌ Camera not found after multiple attempts. Exiting."; exit 1; } 
