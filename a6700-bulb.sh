@@ -14,6 +14,29 @@ SAVE_PATH="$HOME/a6700"
 # Do not change anything below this line unless you know what you're doing           ###
 ########################################################################################
 
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -e|--exposure-length)
+            EXPOSURE_TIME="$2"
+            shift 2
+            ;;
+        -n|--num-exposures)
+            NUM_EXPOSURES="$2"
+            shift 2
+            ;;
+        -s|--save-path)
+            SAVE_PATH="$2"
+            shift 2
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [-e exposure-length] [-n num-exposures] [-s save-path]"
+            exit 1
+            ;;
+    esac
+done
+
 # Ensure the save directory exists
 mkdir -p "$SAVE_PATH"
 
