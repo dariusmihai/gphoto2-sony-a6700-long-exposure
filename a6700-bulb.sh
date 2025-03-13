@@ -5,9 +5,10 @@
 # Menu -> Exposure -> Bulb timer. Set to On and Exposure time to the desired length ###
 #######################################################################################
 
-# Change the following values according to what you're trying to achieve
+# Default values. Change them if you want to run the script without any arguments and 
+# still get your desired outcome
 NUM_EXPOSURES=5
-EXPOSURE_TIME=120  # Set this to match the bulb timer setting in the camera
+EXPOSURE_TIME=120  # A6700 quirk. Set this to match the bulb timer setting in the camera
 SAVE_PATH="$HOME/a6700"
 
 ########################################################################################
