@@ -18,13 +18,16 @@
 #   -i, --iso               Specify the ISO for the captures (default: 800)              ###
 #                                                                                        ###
 # Example usage:                                                                         ###
-#   ./a6700.sh -e 60 -n 10 -s ~/photos                                                   ###
-#   This will take 10 exposures, each lasting 60 seconds, and save them in the           ###
-#   ~/photos directory.                                                                  ###
+#   ./a6700.sh -n 10 -i 800 -s ~/photos                                                  ###
+#   This will take 10 exposures, and save them in the  ~/photos directory.               ### 
+#   The length of each exposure is determined by the camera, and can be set in:          ###
+#       Menu -> Exposure -> Bulb timer. Set to On and Exposure time to the desired length  #
 ############################################################################################
 
-# Default values. Change them if you want to run the script without any arguments and 
-# still get your desired outcome
+###############################
+# Default values.           ### 
+###############################
+# Change them if you want to run the script without any arguments and still get your desired outcome
 NUM_EXPOSURES=9999
 CAMERA_ISO=800
 SAVE_PATH="$HOME/a6700"
