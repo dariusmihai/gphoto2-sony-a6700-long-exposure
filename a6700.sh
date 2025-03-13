@@ -92,10 +92,11 @@ get_elapsed_time() {
 }
 
 get_exposure_stats() {
-    CURRENT_TIME=$(date +%s)
     EXPOSURE_START_TIME=$1
+    CURRENT_ITERATION=$2
+    CURRENT_TIME=$(date +%s)
     EXPOSURE_DURATION=$((CURRENT_TIME - EXPOSURE_START_TIME))
-    AVERAGE_EXPOSURE_TIME=$(((CURRENT_TIME - START_TIME) / i))
+    AVERAGE_EXPOSURE_TIME=$(((CURRENT_TIME - START_TIME) / CURRENT_ITERATION))
     printf "Current Exposure Time: %02d seconds\n" "$EXPOSURE_DURATION"
     printf "Average Time per Exposure: %02d seconds\n" "$AVERAGE_EXPOSURE_TIME"
 }
@@ -119,7 +120,8 @@ echo " "
 for ((i=1; i<=NUM_EXPOSURES; i++)); do
     TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
     FILENAME="$SAVE_PATH/image_$TIMESTAMP.arw"
-
+    echo " "
+    echo "---------------------------"
     echo "Starting exposure #$i at $TIMESTAMP"
     EXPOSURE_START_TIME=$(date +%s)
 
@@ -133,8 +135,8 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
 
     get_battery_level
     get_elapsed_time
-    get_exposure_stats "$EXPOSURE_START_TIME"
-    sleep 5  # Short delay between exposures
+    get_exposure_stats "$EXPOSURE_START_TIME" "$i"
+    sleep 3  # Short delay between exposures
 done
 
 echo "All exposures completed!"
