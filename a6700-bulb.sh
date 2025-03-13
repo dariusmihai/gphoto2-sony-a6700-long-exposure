@@ -31,7 +31,7 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
     echo "Starting exposure #$i at $TIMESTAMP"
     
     # Capture and download image
-    gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME"; then
+    gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME"
     echo "Exposure #$i completed -> $FILENAME"
 
     sleep 5  # Short delay between exposures
