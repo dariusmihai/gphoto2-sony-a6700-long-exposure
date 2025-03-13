@@ -91,13 +91,15 @@ gphoto2 --set-config iso="$CAMERA_ISO"
 WAIT_TIME=$((EXPOSURE_TIME + 5))
 
 echo " "
-echo "#############################################################################"
-echo "MAKE SURE TO SET THE BULB EXPOSURE TIME ON THE CAMERA TO $EXPOSURE_TIME"
-echo "#############################################################################"
+echo "#####################################################################################"
+echo " "
+echo "MAKE SURE TO SET THE BULB EXPOSURE TIME ON THE CAMERA TO THE DESIRED EXPOSURE LENGTH"
+echo " "
+echo "#####################################################################################"
 echo " "
 
 for ((i=1; i<=NUM_EXPOSURES; i++)); do
-    TIMESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
+    TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
     FILENAME="$SAVE_PATH/image_$TIMESTAMP.arw"
 
     echo "Starting exposure #$i at $TIMESTAMP"
