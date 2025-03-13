@@ -90,6 +90,12 @@ gphoto2 --set-config iso="$CAMERA_ISO"
 # Add buffer time to ensure we don't time out too early
 WAIT_TIME=$((EXPOSURE_TIME + 5))
 
+echo " "
+echo "#############################################################################"
+echo "MAKE SURE TO SET THE BULB EXPOSURE TIME ON THE CAMERA TO $EXPOSURE_TIME"
+echo "#############################################################################"
+echo " "
+
 for ((i=1; i<=NUM_EXPOSURES; i++)); do
     TIMESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
     FILENAME="$SAVE_PATH/image_$TIMESTAMP.arw"
@@ -100,7 +106,10 @@ for ((i=1; i<=NUM_EXPOSURES; i++)); do
     # gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"
     
     # With debug
-    gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
+    #gphoto2 --capture-image-and-download --wait-event=${WAIT_TIME}s --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
+
+    # Slightly better version
+    gphoto2 --capture-image-and-download --wait-event=CAPTURECOMPLETE --filename "$FILENAME" 2>&1 | tee -a "$SAVE_PATH/gphoto2_debug.log" | grep -v "UNKNOWN PTP Property 00000000 changed"
 
     echo "Exposure #$i completed -> $FILENAME"
 
