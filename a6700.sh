@@ -62,7 +62,7 @@ mkdir -p "$SAVE_PATH"
 cleanup() {
     echo "Gracefully shutting down..."
     echo "Available cameras: "
-    gphoto2 --list-cameras  # Disconnects the camera from gphoto2
+    gphoto2 --auto-detect
     exit 0
 }
 
