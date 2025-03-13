@@ -1,9 +1,26 @@
 #!/bin/bash
 
-#######################################################################################
-# On the Sony A6700, set the bulb timer from the camera settings                    ###
-# Menu -> Exposure -> Bulb timer. Set to On and Exposure time to the desired length ###
-#######################################################################################
+############################################################################################
+# On the Sony A6700, set the bulb timer from the camera settings                         ###
+# Menu -> Exposure -> Bulb timer. Set to On and Exposure time to the desired length      ###
+############################################################################################
+
+############################################################################################
+# Usage:                                                                                 ###
+# This script automates long exposure photography using a Sony A6700 camera.             ###
+# It uses gphoto2 to capture multiple long exposures and download the images to the      ###
+# specified save path.                                                                   ###
+#                                                                                        ###
+# Arguments:                                                                             ###
+#   -e, --exposure-length   Set the exposure length in seconds (default: 120 seconds)    ###
+#   -n, --num-exposures      Set the number of exposures to take (default: 5)            ###
+#   -s, --save-path          Specify the directory to save the images (default: ~/a6700) ###
+#                                                                                        ###
+# Example usage:                                                                         ###
+#   ./long_exposure.sh -e 60 -n 10 -s ~/photos                                           ###
+#   This will take 10 exposures, each lasting 60 seconds, and save them in the           ###
+#   ~/photos directory.                                                                  ###
+############################################################################################
 
 # Default values. Change them if you want to run the script without any arguments and 
 # still get your desired outcome
@@ -11,9 +28,9 @@ NUM_EXPOSURES=5
 EXPOSURE_TIME=120  # A6700 quirk. Set this to match the bulb timer setting in the camera
 SAVE_PATH="$HOME/a6700"
 
-########################################################################################
-# Do not change anything below this line unless you know what you're doing           ###
-########################################################################################
+############################################################################################
+# Do not change anything below this line unless you know what you're doing               ###
+############################################################################################
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
