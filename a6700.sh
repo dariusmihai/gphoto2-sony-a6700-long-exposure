@@ -24,7 +24,7 @@
 
 # Default values. Change them if you want to run the script without any arguments and 
 # still get your desired outcome
-NUM_EXPOSURES=5
+NUM_EXPOSURES=9999
 EXPOSURE_TIME=120  # A6700 quirk. Set this to match the bulb timer setting in the camera
 SAVE_PATH="$HOME/a6700"
 
