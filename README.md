@@ -6,6 +6,10 @@ Sometimes you just want to set up your camera and let it do multiple long exposu
 [Gphoto2](https://github.com/gphoto/gphoto2) is a great tool for this. Unfortunately the Sony A6700 has some quirks that doesn't let gphoto2 do its thing.
 For more info on the quirks, see the feature request that I posted on the gphoto2 repo: [Issue link](https://github.com/gphoto/gphoto2/issues/678)
 
+## Compatibility  
+This script can be used on:
+- Linux computers that can run gphoto2.
+- Raspberry Pi. Tested on Pi 5.
 
 ## How to use this script
 First you have to install gphoto2 of course. 
