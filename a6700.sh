@@ -17,7 +17,7 @@
 #   -s, --save-path          Specify the directory to save the images (default: ~/a6700) ###
 #                                                                                        ###
 # Example usage:                                                                         ###
-#   ./long_exposure.sh -e 60 -n 10 -s ~/photos                                           ###
+#   ./a6700.sh -e 60 -n 10 -s ~/photos                                           ###
 #   This will take 10 exposures, each lasting 60 seconds, and save them in the           ###
 #   ~/photos directory.                                                                  ###
 ############################################################################################
