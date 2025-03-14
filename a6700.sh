@@ -187,7 +187,7 @@ capture_image() {
 
     echo " "
     echo "------------------------------------------------------------------------"
-    echo "📸 Starting exposure #$exposure_number..."
+    echo "📸 Starting exposure #$exposure_number / $NUM_EXPOSURES ..."
 
     # Check camera connection before each capture
     check_camera_connection 9999 "silent"
