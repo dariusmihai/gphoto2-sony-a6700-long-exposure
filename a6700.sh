@@ -158,12 +158,21 @@ get_exposure_stats() {
     printf "⌚ Average Time per Exposure: %02d seconds\n" "$AVERAGE_EXPOSURE_TIME"
 }
 
+get_disk_space() {
+    # Get the disk space for the directory specified in SAVE_PATH
+    DISK_SPACE_OUTPUT=$(df -h "$SAVE_PATH" | awk 'NR==2 {print $4}')  # Get the available space (e.g., 10G, 500M)
+    
+    # Print the disk space with an appropriate message
+    echo "💾 Available disk space on $SAVE_PATH: $DISK_SPACE_OUTPUT"
+}
+
 # Function to capture an image with retry logic
 capture_image() {
     local wait_time=10  # Wait time between retries (seconds)
     local exposure_number="$1"
     local timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
     local filename="$SAVE_PATH/image_$timestamp.arw"
+    local exposure_start_time =$(date +%s)
 
     echo " "
     echo "------------------------------------------------------------------------"
@@ -188,9 +197,11 @@ capture_image() {
         else
             echo "❌ ERROR: File not found after capture! Retrying..."
         fi
+        get_disk_space
         get_battery_level
         get_elapsed_time
-        get_exposure_stats "$EXPOSURE_START_TIME" "$exposure_number"
+        get_exposure_stats "$exposure_start_time" "$exposure_number"
+        
         return 0  # Success
     else
         echo "⚠️  ERROR: Failed to capture image. Checking camera connection..."
