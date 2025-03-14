@@ -5,7 +5,7 @@ script_path="$(pwd)/a6700_watchdog.sh"
 
 # Define fixed values
 app_name="A6700 Watchdog"
-app_desc="Start and monitor the a6700 service"
+app_desc="Start and monitor the a6700 watchdog"
 app_icon="utilities-system-monitor"  # Or replace with a path to an icon
 
 # Define the output desktop file name
