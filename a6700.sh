@@ -185,7 +185,6 @@ capture_image() {
         # Verify that the file was successfully saved
         if [ -f "$filename" ]; then
             echo "✅ File successfully saved: $filename"
-            return 0  # Success
         else
             echo "❌ ERROR: File not found after capture! Retrying..."
         fi
