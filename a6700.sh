@@ -56,9 +56,17 @@ while [[ $# -gt 0 ]]; do
             SAVE_PATH="$2"
             shift 2
             ;;
+        -h|--help)
+            echo " "
+            echo "Sony A6700 control script"
+            echo " "
+            echo "Usage: $0 [-n|--num-exposures NUMBER] [-i|--iso NUMBER] [-s|--save-path STRING]"
+            echo " "
+            exit 1
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-n num-exposures] [-i iso] [-s save-path]"
+            echo "Usage: $0 [-n|--num-exposures NUMBER] [-i|--iso NUMBER] [-s|--save-path STRING]"
             exit 1
             ;;
     esac
