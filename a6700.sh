@@ -62,6 +62,9 @@ while [[ $# -gt 0 ]]; do
             echo " "
             echo "Usage: $0 [-n|--num-exposures NUMBER] [-i|--iso NUMBER] [-s|--save-path STRING]"
             echo " "
+            echo "Example: ./a6700.sh --num-exposures 100 --iso 800 --save-path ~/pictures"
+            echo "Example: ./a6700.sh -n 100 -i 800 -s ~/pictures"
+            echo " "
             exit 1
             ;;
         *)
