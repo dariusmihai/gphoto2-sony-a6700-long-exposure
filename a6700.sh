@@ -156,7 +156,7 @@ get_elapsed_time() {
     ELAPSED_HOURS=$((ELAPSED_SECONDS / 3600))
     ELAPSED_MINUTES=$(((ELAPSED_SECONDS % 3600) / 60))
     ELAPSED_SECONDS=$((ELAPSED_SECONDS % 60))
-    printf "⏳Elapsed Time: %02d:%02d:%02d\n" "$ELAPSED_HOURS" "$ELAPSED_MINUTES" "$ELAPSED_SECONDS"
+    printf "⏳ Elapsed Time: %02d:%02d:%02d\n" "$ELAPSED_HOURS" "$ELAPSED_MINUTES" "$ELAPSED_SECONDS"
 }
 
 get_exposure_stats() {
