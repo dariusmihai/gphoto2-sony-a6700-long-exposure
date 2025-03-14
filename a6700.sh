@@ -116,12 +116,16 @@ camera_init() {
 
     # Set shutter speed to Bulb. 61 is the correct setting for bulb on the Sony A6700
     if ! gphoto2 --set-config shutterspeed=61; then
-        echo "⚠️  ERROR: Failed to set shutter speed."
+        echo "⚠️  ERROR: Failed to set shutter speed. Reset and retry..."
+        gphoto2 --reset
+        camera_init
         return 1
     fi
     
     if ! gphoto2 --set-config iso="$CAMERA_ISO"; then
-        echo "⚠️  ERROR: Failed to set ISO."
+        echo "⚠️  ERROR: Failed to set ISO. Reset and retry..."
+        gphoto2 --reset
+        camera_init
         return 1
     fi
 
