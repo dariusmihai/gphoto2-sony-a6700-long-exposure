@@ -172,7 +172,7 @@ capture_image() {
     local exposure_number="$1"
     local timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
     local filename="$SAVE_PATH/image_$timestamp.arw"
-    local exposure_start_time =$(date +%s)
+    local exposure_start_time=$(date +%s)
 
     echo " "
     echo "------------------------------------------------------------------------"
