@@ -179,8 +179,16 @@ capture_image() {
     fi
 
     # Capture and download image; Disregard spammy messages in the output.
-    if gphoto2 --capture-image-and-download --wait-event-and-download=CAPTURECOMPLETE --filename "$filename" 2>&1 | grep -v "UNKNOWN PTP Property 00000000 changed"; then
+    # It looks weird to filter out "ERROR: Could not capture image, but in the case of the A6700 that's ok. As long as gphoto2 doesn't quit, it's fine."
+    if gphoto2 --capture-image-and-download --wait-event-and-download=CAPTURECOMPLETE --filename "$filename" 2>&1 | grep -v -e "UNKNOWN PTP Property 00000000 changed" -e "ERROR: Could not capture image." -e "ERROR: Could not capture."; then
         echo "✅ Exposure #$exposure_number completed -> $filename"
+        # Verify that the file was successfully saved
+        if [ -f "$filename" ]; then
+            echo "✅ File successfully saved: $filename"
+            return 0  # Success
+        else
+            echo "❌ ERROR: File not found after capture! Retrying..."
+        fi
         get_battery_level
         get_elapsed_time
         get_exposure_stats "$EXPOSURE_START_TIME" "$exposure_number"
